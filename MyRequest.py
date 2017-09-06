@@ -1,18 +1,24 @@
 import requests
-r = requests.get('https://api.github.com/user', auth=('user', 'pass'))
+import time
+import re
+import json
+name = '爱学派FF'
+pwd = '1111'
+localtime = time.time().as_integer_ratio()
+print(localtime)
+dataload =(('name', name),('pwd',pwd),('time', localtime),('method','login.do'))
+r = requests.post('http://school.etiantian.com/aixuepadtios/test/_manager/GenderCourseRecordSign.jsp', data=dataload)
 s = r.status_code
 print(s)
-r.status_code
-#200
-print('this is headers')
-r.headers['content-type']
-#'application/json; charset=utf8'
-print('this is encoding')
-r.encoding
-#'utf-8'
-print('this is text value')
-r.text
-#u'{"type":"User"...'
-print('this is json value')
-r.json()
-#{u'private_gists': 419, u'total_private_repos': 77, ...}
+t = r.text
+print(t.rstrip())
+print("------------------------------")
+dataloadlogin =(('name', name),('pwd',pwd),('time', localtime),('sign',t.rstrip()))
+loginRequest = requests.post('http://school.etiantian.com/aixuepadtios/login.do', data=dataloadlogin)
+print(loginRequest.json())
+data1 = loginRequest.json()
+str =loginRequest.text
+#re.search(pattern, string, flags=0)
+str1 =re.search("schoolId\":(.*),\"jid", str, flags=0)
+print("--------")
+print(str1)
